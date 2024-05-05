@@ -20,11 +20,6 @@ public class Cube : MonoBehaviour
         Recolour(DefaultColor);
     }
 
-    public void Recolour(Color color)
-    {
-        _meshRenderer.material.color = color;
-    }
-
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.TryGetComponent(out Platform platform) && _meshRenderer.material.color == DefaultColor)
@@ -33,5 +28,10 @@ public class Cube : MonoBehaviour
 
             StartCoroutine(platform.ReturnInPool(this));
         }
+    }
+
+    public void Recolour(Color color)
+    {
+        _meshRenderer.material.color = color;
     }
 }
