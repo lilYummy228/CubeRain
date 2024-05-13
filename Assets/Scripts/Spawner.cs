@@ -1,47 +1,21 @@
-using System.Collections;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
+public class Spawner<T> where T : MonoBehaviour
 {
-    [SerializeField] private Transform _platform;
-    [SerializeField] private CubePool _pool;
+    private Counter _counter;
+    private int _spawnedCount = 0;
 
-    private float _positionX;
-    private float _positionZ;
-    private float _positionY = 100f;
-    private float _waitTime = 0.5f;
-    private WaitForSeconds _wait;
-
-    private void Start()
+    public Spawner(Counter counter)
     {
-        _positionX = _platform.localScale.x * 5;
-        _positionZ = _platform.localScale.z * 5;
-        transform.position = new Vector3(_platform.position.x, _platform.position.y + _positionY, _platform.position.z);
-        _wait = new WaitForSeconds(_waitTime);
-
-        StartCoroutine(nameof(GenerateCubes));
+        _counter = counter;
     }
 
-    private IEnumerator GenerateCubes()
-    {
-        while (enabled)
-        {
-            yield return _wait;
-            Spawn();
-        }
-    }
+    public void Spawn(Vector3 spawnPoint, T gameObject)
+    {        
+        gameObject.gameObject.SetActive(true);
 
-    private void Spawn()
-    {
-        float spawnPositionX = Random.Range(-_positionX, _positionX);
-        float spawnPositionZ = Random.Range(-_positionZ, _positionZ);
+        gameObject.transform.position = spawnPoint;
 
-        Vector3 spawnPoint = new Vector3(spawnPositionX, transform.position.y, spawnPositionZ);
-
-        Cube cube = _pool.GetCube();
-        cube.gameObject.SetActive(true);
-        cube.transform.position = spawnPoint;
-        cube.Rigidbody.velocity = Vector3.down * cube.Speed;
-        cube.Recolour(cube.DefaultColor);
+        _counter.ShowInfo(_spawnedCount++);
     }
 }
