@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -15,7 +14,7 @@ public class Cube : MonoBehaviour
     private float _minLifeTime = 2f;
     private float _maxLifeTime = 5f;
 
-    public event Action<Cube> Landed;
+    public event System.Action<Cube> Landed;
 
     private void Awake()
     {
@@ -49,7 +48,7 @@ public class Cube : MonoBehaviour
         _meshRenderer.material.color = color;
     }
 
-    public void Init(Vector3 position, Vector3 direction)
+    public void Initialize(Vector3 position, Vector3 direction)
     {
         transform.position = position;
         _rigidbody.velocity = direction * _speed;

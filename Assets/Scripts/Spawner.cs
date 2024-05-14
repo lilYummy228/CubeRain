@@ -2,20 +2,19 @@ using UnityEngine;
 
 public class Spawner<T> where T : MonoBehaviour
 {
-    private Counter _counter;
+    private View _view;
     private int _spawnedCount = 0;
 
-    public Spawner(Counter counter)
+    public Spawner(View view)
     {
-        _counter = counter;
+        _view = view;
     }
 
     public void Spawn(Vector3 spawnPoint, T gameObject)
     {        
         gameObject.gameObject.SetActive(true);
-
         gameObject.transform.position = spawnPoint;
 
-        _counter.ShowInfo(_spawnedCount++);
+        _view.ShowInfo(++_spawnedCount);
     }
 }

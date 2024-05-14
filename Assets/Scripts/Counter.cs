@@ -1,12 +1,28 @@
-using TMPro;
 using UnityEngine;
 
 public class Counter : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _text;
+    [SerializeField] private BombPool _bombPool;
+    [SerializeField] private CubePool _cubePool;
+    [SerializeField] private View _view;
 
-    public void ShowInfo(int count)
+    private int _count;
+
+    private void OnEnable()
     {
-        _text.text = count.ToString();
+        _bombPool.BombCountChanged += CountActiveObjects;
+        _cubePool.CubeCountChanged += CountActiveObjects;
+    }
+
+    private void OnDisable()
+    {
+        _bombPool.BombCountChanged -= CountActiveObjects;
+        _cubePool.CubeCountChanged -= CountActiveObjects;
+    }
+
+    public void CountActiveObjects(int count)
+    {
+        _count += count;
+        _view.ShowInfo(_count);
     }
 }

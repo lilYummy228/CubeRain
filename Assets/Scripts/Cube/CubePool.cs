@@ -1,13 +1,17 @@
+using System;
 using UnityEngine;
 
 public class CubePool : MonoBehaviour
 {
+    private const int Unit = 1;
+
     [SerializeField] private Cube _cube;
     [SerializeField] private Transform _container;
     [SerializeField] private BombSpawner _bombSpawner;
-    [SerializeField] private Counter _counter;
 
     private ObjectPool<Cube> _cubePool;
+
+    public event Action<int> CubeCountChanged;
 
     private void Awake()
     {
@@ -19,6 +23,8 @@ public class CubePool : MonoBehaviour
         Cube cube = _cubePool.GetObject();
         cube.Landed += PutObject;
 
+        CubeCountChanged?.Invoke(Unit);
+
         return cube;
     }
 
@@ -26,6 +32,8 @@ public class CubePool : MonoBehaviour
     {
         _cubePool.PutObject(cube);
         cube.Landed -= PutObject;
+
+        CubeCountChanged?.Invoke(-Unit);
 
         _bombSpawner.Spawn(cube.transform.position);
     }

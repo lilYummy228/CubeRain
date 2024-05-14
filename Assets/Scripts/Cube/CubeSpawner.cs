@@ -5,22 +5,23 @@ public class CubeSpawner : MonoBehaviour
 {
     [SerializeField] private Transform _platform;
     [SerializeField] private CubePool _pool;
-    [SerializeField] private Counter _counter;
+    [SerializeField] private View _view;
 
     private Spawner<Cube> _spawner;
 
+    private float _waitTime = 1f;
+    private float _muliplier = 5f;
     private float _positionX;
     private float _positionZ;
-    private float _waitTime = 0.5f;
     private WaitForSeconds _wait;
 
     private void Start()
     {
-        _positionX = _platform.localScale.x * 5;
-        _positionZ = _platform.localScale.z * 5;
+        _positionX = _platform.localScale.x * _muliplier;
+        _positionZ = _platform.localScale.z * _muliplier;
 
-        _spawner = new Spawner<Cube>(_counter);
-       
+        _spawner = new Spawner<Cube>(_view);       
+
         _wait = new WaitForSeconds(_waitTime);
 
         StartCoroutine(nameof(GenerateCubes));
@@ -39,12 +40,10 @@ public class CubeSpawner : MonoBehaviour
     {
         float spawnPositionX = Random.Range(-_positionX, _positionX);   
         float spawnPositionZ = Random.Range(-_positionZ, _positionZ);
-
         Vector3 spawnPoint = new Vector3(spawnPositionX, transform.position.y, spawnPositionZ);
 
         Cube cube = _pool.GetObject();
-
         _spawner.Spawn(spawnPoint, cube);
-        cube.Init(spawnPoint, Vector3.down);
+        cube.Initialize(spawnPoint, Vector3.down);
     }
 }

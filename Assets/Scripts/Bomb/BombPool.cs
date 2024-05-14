@@ -1,11 +1,16 @@
+using System;
 using UnityEngine;
 
 public class BombPool : MonoBehaviour
 {
+    private const int Unit = 1;
+
     [SerializeField] private Bomb _bomb;
     [SerializeField] private Transform _container;
 
     private ObjectPool<Bomb> _bombPool;
+
+    public event Action<int> BombCountChanged;
 
     private void Awake()
     {
@@ -17,6 +22,8 @@ public class BombPool : MonoBehaviour
         Bomb bomb = _bombPool.GetObject();
         bomb.Exploded += PutBomb;
 
+        BombCountChanged?.Invoke(Unit);
+
         return bomb;
     }
 
@@ -25,5 +32,7 @@ public class BombPool : MonoBehaviour
     {
         _bombPool.PutObject(bomb);
         bomb.Exploded -= PutBomb;
+
+        BombCountChanged?.Invoke(-Unit);
     }
 }
